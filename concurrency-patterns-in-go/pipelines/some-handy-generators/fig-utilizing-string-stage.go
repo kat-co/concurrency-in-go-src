@@ -5,7 +5,11 @@ import (
 )
 
 func main() {
-	take := func(done <-chan interface{}, valueStream <-chan interface{}, num int) <-chan interface{} {
+	take := func(
+		done <-chan interface{},
+		valueStream <-chan interface{},
+		num int,
+	) <-chan interface{} {
 		takeStream := make(chan interface{})
 		go func() {
 			defer close(takeStream)
@@ -19,7 +23,10 @@ func main() {
 		}()
 		return takeStream
 	}
-	repeat := func(done <-chan interface{}, values ...interface{}) <-chan interface{} {
+	repeat := func(
+		done <-chan interface{},
+		values ...interface{},
+	) <-chan interface{} {
 		valueStream := make(chan interface{})
 		go func() {
 			defer close(valueStream)
@@ -35,7 +42,10 @@ func main() {
 		}()
 		return valueStream
 	}
-	toString := func(done <-chan interface{}, valueStream <-chan interface{}) <-chan string {
+	toString := func(
+		done <-chan interface{},
+		valueStream <-chan interface{},
+	) <-chan string {
 		stringStream := make(chan string)
 		go func() {
 			defer close(stringStream)

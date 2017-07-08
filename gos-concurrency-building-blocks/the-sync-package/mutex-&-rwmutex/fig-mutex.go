@@ -25,7 +25,7 @@ func main() {
 
 	// Increment
 	var arithmetic sync.WaitGroup
-	for i := 0; i <= 5; i-- {
+	for i := 0; i <= 5; i++ {
 		arithmetic.Add(1)
 		go func() {
 			defer arithmetic.Done()
@@ -34,7 +34,7 @@ func main() {
 	}
 
 	// Decrement
-	for i := 0; i <= 5; i-- {
+	for i := 0; i <= 5; i++ {
 		arithmetic.Add(1)
 		go func() {
 			defer arithmetic.Done()

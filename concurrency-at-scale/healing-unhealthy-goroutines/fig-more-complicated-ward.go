@@ -43,8 +43,14 @@ func main() {
 		pulseInterval time.Duration,
 	) (heartbeat <-chan interface{}) // <1>
 
-	newSteward := func(timeout time.Duration, startGoroutine startGoroutineFn) startGoroutineFn { // <2>
-		return func(done <-chan interface{}, pulseInterval time.Duration) <-chan interface{} {
+	newSteward := func(
+		timeout time.Duration,
+		startGoroutine startGoroutineFn,
+	) startGoroutineFn { // <2>
+		return func(
+			done <-chan interface{},
+			pulseInterval time.Duration,
+		) <-chan interface{} {
 			heartbeat := make(chan interface{})
 			go func() {
 				defer close(heartbeat)
@@ -86,7 +92,11 @@ func main() {
 			return heartbeat
 		}
 	}
-	take := func(done <-chan interface{}, valueStream <-chan interface{}, num int) <-chan interface{} {
+	take := func(
+		done <-chan interface{},
+		valueStream <-chan interface{},
+		num int,
+	) <-chan interface{} {
 		takeStream := make(chan interface{})
 		go func() {
 			defer close(takeStream)

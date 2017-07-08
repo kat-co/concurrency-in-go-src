@@ -27,7 +27,10 @@ func tmpFileOrFatal() *os.File {
 }
 
 func performWrite(b *testing.B, writer io.Writer) {
-	repeat := func(done <-chan interface{}, values ...interface{}) <-chan interface{} {
+	repeat := func(
+		done <-chan interface{},
+		values ...interface{},
+	) <-chan interface{} {
 		valueStream := make(chan interface{})
 		go func() {
 			defer close(valueStream)
@@ -43,7 +46,11 @@ func performWrite(b *testing.B, writer io.Writer) {
 		}()
 		return valueStream
 	}
-	take := func(done <-chan interface{}, valueStream <-chan interface{}, num int) <-chan interface{} {
+	take := func(
+		done <-chan interface{},
+		valueStream <-chan interface{},
+		num int,
+	) <-chan interface{} {
 		takeStream := make(chan interface{})
 		go func() {
 			defer close(takeStream)

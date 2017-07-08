@@ -20,7 +20,11 @@ func main() {
 		return intStream
 	}
 
-	multiply := func(done <-chan interface{}, intStream <-chan int, multiplier int) <-chan int {
+	multiply := func(
+		done <-chan interface{},
+		intStream <-chan int,
+		multiplier int,
+	) <-chan int {
 		multipliedStream := make(chan int)
 		go func() {
 			defer close(multipliedStream)
@@ -35,7 +39,11 @@ func main() {
 		return multipliedStream
 	}
 
-	add := func(done <-chan interface{}, intStream <-chan int, additive int) <-chan int {
+	add := func(
+		done <-chan interface{},
+		intStream <-chan int,
+		additive int,
+	) <-chan int {
 		addedStream := make(chan int)
 		go func() {
 			defer close(addedStream)

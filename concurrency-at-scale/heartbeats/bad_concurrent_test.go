@@ -5,7 +5,10 @@ import (
 	"time"
 )
 
-func DoWork(done <-chan interface{}, nums ...int) (<-chan interface{}, <-chan int) {
+func DoWork(
+	done <-chan interface{},
+	nums ...int,
+) (<-chan interface{}, <-chan int) {
 	heartbeat := make(chan interface{}, 1)
 	intStream := make(chan int)
 	go func() {
@@ -41,7 +44,12 @@ func TestDoWork_GeneratesAllNumbers(t *testing.T) {
 		select {
 		case r := <-results:
 			if r != expected {
-				t.Errorf("index %v: expected %v, but received %v,", i, expected, r)
+				t.Errorf(
+					"index %v: expected %v, but received %v,",
+					i,
+					expected,
+					r,
+				)
 			}
 		case <-time.After(1 * time.Second): // <1>
 			t.Fatal("test timed out")

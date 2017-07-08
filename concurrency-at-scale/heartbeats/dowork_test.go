@@ -5,7 +5,10 @@ import (
 	"time"
 )
 
-func DoWork(done <-chan interface{}, nums ...int) (<-chan interface{}, <-chan int) {
+func DoWork(
+	done <-chan interface{},
+	nums ...int,
+) (<-chan interface{}, <-chan int) {
 	heartbeat := make(chan interface{}, 1)
 	intStream := make(chan int)
 	go func() {

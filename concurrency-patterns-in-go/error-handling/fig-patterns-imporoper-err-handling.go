@@ -6,7 +6,10 @@ import (
 )
 
 func main() {
-	checkStatus := func(done <-chan interface{}, urls ...string) <-chan *http.Response {
+	checkStatus := func(
+		done <-chan interface{},
+		urls ...string,
+	) <-chan *http.Response {
 		responses := make(chan *http.Response)
 		go func() {
 			defer close(responses)
@@ -29,7 +32,8 @@ func main() {
 	done := make(chan interface{})
 	defer close(done)
 
-	for response := range checkStatus(done, "https://www.google.com", "https://badhost") {
+	urls := []string{"https://www.google.com", "https://badhost"}
+	for response := range checkStatus(done, urls...) {
 		fmt.Printf("Response: %v\n", response.Status)
 	}
 }

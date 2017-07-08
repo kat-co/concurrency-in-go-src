@@ -32,7 +32,8 @@ func main() {
 	done := make(chan interface{})
 	defer close(done)
 
-	for result := range checkStatus(done, "https://www.google.com", "https://badhost") {
+	urls := []string{"https://www.google.com", "https://badhost"}
+	for result := range checkStatus(done, urls...) {
 		if result.Error != nil { // <5>
 			fmt.Printf("error: %v", result.Error)
 			continue

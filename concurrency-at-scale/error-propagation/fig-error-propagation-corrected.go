@@ -58,7 +58,11 @@ func runJob(id string) error {
 			id,
 		)} // <1>
 	} else if isExecutable == false {
-		return wrapError(nil, "cannot run job %q: requisite binaries are not executable", id)
+		return wrapError(
+			nil,
+			"cannot run job %q: requisite binaries are not executable",
+			id,
+		)
 	}
 
 	return exec.Command(jobBinPath, "--id="+id).Run()

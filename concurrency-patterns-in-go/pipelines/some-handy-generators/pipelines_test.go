@@ -3,7 +3,10 @@ package pipelines
 import ()
 
 func BenchmarkGeneric(b *testing.B) {
-	repeat := func(done <-chan interface{}, values ...interface{}) <-chan interface{} {
+	repeat := func(
+		done <-chan interface{},
+		values ...interface{},
+	) <-chan interface{} {
 		valueStream := make(chan interface{})
 		go func() {
 			defer close(valueStream)
@@ -19,7 +22,11 @@ func BenchmarkGeneric(b *testing.B) {
 		}()
 		return valueStream
 	}
-	take := func(done <-chan interface{}, valueStream <-chan interface{}, num int) <-chan interface{} {
+	take := func(
+		done <-chan interface{},
+		valueStream <-chan interface{},
+		num int,
+	) <-chan interface{} {
 		takeStream := make(chan interface{})
 		go func() {
 			defer close(takeStream)
@@ -33,7 +40,10 @@ func BenchmarkGeneric(b *testing.B) {
 		}()
 		return takeStream
 	}
-	toString := func(done <-chan interface{}, valueStream <-chan interface{}) <-chan string {
+	toString := func(
+		done <-chan interface{},
+		valueStream <-chan interface{},
+	) <-chan string {
 		stringStream := make(chan string)
 		go func() {
 			defer close(stringStream)
@@ -73,7 +83,11 @@ func BenchmarkTyped(b *testing.B) {
 		return valueStream
 	}
 
-	take := func(done <-chan interface{}, valueStream <-chan string, num int) <-chan string {
+	take := func(
+		done <-chan interface{},
+		valueStream <-chan string,
+		num int,
+	) <-chan string {
 		takeStream := make(chan string)
 		go func() {
 			defer close(takeStream)

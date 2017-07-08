@@ -32,7 +32,8 @@ func main() {
 	defer close(done)
 
 	errCount := 0
-	for result := range checkStatus(done, "a", "https://www.google.com", "b", "c", "d") {
+	urls := []string{"a", "https://www.google.com", "b", "c", "d"}
+	for result := range checkStatus(done, urls...) {
 		if result.Error != nil {
 			fmt.Printf("error: %v\n", result.Error)
 			errCount++
