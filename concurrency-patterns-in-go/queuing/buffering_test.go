@@ -21,7 +21,7 @@ func BenchmarkBufferedWrite(b *testing.B) {
 func tmpFileOrFatal() *os.File {
 	file, err := ioutil.TempFile("", "tmp")
 	if err != nil {
-		log.Fatal("error: %v", err)
+		log.Fatalf("error: %v", err)
 	}
 	return file
 }
