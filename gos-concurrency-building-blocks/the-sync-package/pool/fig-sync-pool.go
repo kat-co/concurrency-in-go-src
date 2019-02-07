@@ -7,9 +7,12 @@ import (
 
 func main() {
 	var numCalcsCreated int
+	var m sync.Mutex
 	calcPool := &sync.Pool{
 		New: func() interface{} {
+			m.Lock()
 			numCalcsCreated += 1
+			m.Unlock()
 			mem := make([]byte, 1024)
 			return &mem // <1>
 		},
