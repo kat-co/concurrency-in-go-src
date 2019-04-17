@@ -43,11 +43,49 @@ func main() {
 
 	wg.Wait()
 }
-func Per(eventCount int, duration time.Duration) rate.Limit {
-	return rate.Every(duration / time.Duration(eventCount))
+func Per(eventCont int, duration time.Duration) rate.Limit {
+	return rate.Every(duration / time.Duration(eventCont))
+}
+func Open() *APIConnection {
+	return &APIConnection{
+		apiLimit: MultiLimiter( // <1>
+			rate.NewLimiter(Per(2, time.Second), 1),
+			rate.NewLimiter(Per(10, time.Minute), 10),
+		),
+		diskLimit: MultiLimiter( // <2>
+			rate.NewLimiter(rate.Limit(1), 1),
+		),
+		networkLimit: MultiLimiter( // <3>
+			rate.NewLimiter(Per(3, time.Second), 3),
+		),
+	}
 }
 
-type RateLimiter interface { // <1>
+type APIConnection struct{
+	apiLimit RateLimiter
+	diskLimit RateLimiter
+	networkLimit RateLimiter
+}
+
+func (a *APIConnection) ReadFile(ctx context.Context) error {
+	err := MultiLimiter(a.apiLimit, a.diskLimit).Wait(ctx) // <4>
+	if err != nil {
+		return err
+	}
+	// Pretend we do work here
+	return nil
+}
+
+func (a *APIConnection) ResolveAddress(ctx context.Context) error {
+	err := MultiLimiter(a.apiLimit, a.networkLimit).Wait(ctx) // <5>
+	if err != nil {
+		return err
+	}
+	// Pretend we do work here
+	return nil
+}
+
+type RateLimiter interface{
 	Wait(context.Context) error
 	Limit() rate.Limit
 }
@@ -56,7 +94,7 @@ func MultiLimiter(limiters ...RateLimiter) *multiLimiter {
 	byLimit := func(i, j int) bool {
 		return limiters[i].Limit() < limiters[j].Limit()
 	}
-	sort.Slice(limiters, byLimit) // <2>
+	sort.Slice(limiters, byLimit)
 	return &multiLimiter{limiters: limiters}
 }
 
@@ -74,5 +112,5 @@ func (l *multiLimiter) Wait(ctx context.Context) error {
 }
 
 func (l *multiLimiter) Limit() rate.Limit {
-	return l.limiters[0].Limit() // <3>
+	return l.limiters[0].Limit()
 }
